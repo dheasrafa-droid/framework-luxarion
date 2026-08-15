@@ -23,7 +23,8 @@
     "build:all": "vite build && vite build --mode lib",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "test": "tsx tests/cli-test.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
