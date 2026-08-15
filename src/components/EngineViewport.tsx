@@ -45,12 +45,12 @@ export const EngineViewport: React.FC<EngineViewportProps> = ({
   const [isZenMode, setIsZenMode] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-  // References for live instances
   const rendererGLRef = useRef<WebGLRenderer | null>(null);
   const renderer2DRef = useRef<Canvas2DRenderer | null>(null);
   const currentDemoInstanceRef = useRef<any>(null);
   const animationFrameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number>(performance.now());
+  const simulationTimeRef = useRef<number>(0);
   const isPlayingRef = useRef<boolean>(isPlaying);
 
   useEffect(() => {
@@ -130,6 +130,8 @@ export const EngineViewport: React.FC<EngineViewportProps> = ({
 
     // Initialize the selected demo
     try {
+      simulationTimeRef.current = 0;
+      lastTimeRef.current = performance.now();
       currentDemoInstanceRef.current = activeDemo.init(
         rendererGLRef.current,
         renderer2DRef.current,
@@ -145,7 +147,7 @@ export const EngineViewport: React.FC<EngineViewportProps> = ({
     let calculatedFPS = 60;
 
     const renderLoop = (now: number) => {
-      const delta = (now - lastTimeRef.current) / 1000;
+      const rawDelta = Math.min((now - lastTimeRef.current) / 1000, 0.1);
       lastTimeRef.current = now;
 
       frameCount++;
@@ -155,9 +157,13 @@ export const EngineViewport: React.FC<EngineViewportProps> = ({
         fpsTimer = now;
       }
 
-      if (isPlayingRef.current && currentDemoInstanceRef.current) {
-        const timeInSeconds = now / 1000;
-        currentDemoInstanceRef.current.update(delta, timeInSeconds);
+      if (currentDemoInstanceRef.current) {
+        const effectiveDelta = isPlayingRef.current ? rawDelta : 0;
+        if (isPlayingRef.current) {
+          simulationTimeRef.current += rawDelta;
+        }
+
+        currentDemoInstanceRef.current.update(effectiveDelta, simulationTimeRef.current);
 
         if (!is2D && rendererGLRef.current && currentDemoInstanceRef.current.scene && currentDemoInstanceRef.current.camera) {
           rendererGLRef.current.render(
@@ -169,14 +175,14 @@ export const EngineViewport: React.FC<EngineViewportProps> = ({
             drawCalls: rendererGLRef.current.stats.drawCalls,
             triangles: rendererGLRef.current.stats.triangles,
             vertices: rendererGLRef.current.stats.vertices,
-            fps: calculatedFPS
+            fps: isPlayingRef.current ? calculatedFPS : 0
           });
         } else if (is2D) {
           onUpdateStats({
             drawCalls: 1,
             triangles: 800,
             vertices: 800,
-            fps: calculatedFPS
+            fps: isPlayingRef.current ? calculatedFPS : 0
           });
         }
       }
