@@ -14,6 +14,9 @@ import { Color } from '../math/Color';
 import { DirectionalLight } from '../lights/DirectionalLight';
 import { PointLight } from '../lights/PointLight';
 import { AmbientLight } from '../lights/AmbientLight';
+import { SpotLight } from '../lights/SpotLight';
+import { HemisphereLight } from '../lights/HemisphereLight';
+import { LightManager, LightingData } from '../lights/LightManager';
 
 export interface RenderStats {
   drawCalls: number;
@@ -111,30 +114,17 @@ export class WebGLRenderer {
       this.clear();
     }
 
-    // 3. Collect Lights
-    let ambientColor = new Color(0.1, 0.1, 0.1);
-    let dirLightColor = new Color(0, 0, 0);
-    let dirLightDir = [0, -1, 0];
-    let ptLightColor = new Color(0, 0, 0);
-    let ptLightPos = [0, 0, 0];
-    let ptLightDist = 10;
+    // 3. Collect Lights via LightManager
+    const lightingData = LightManager.collect(scene.lights);
 
-    for (let i = 0; i < scene.lights.length; i++) {
-      const light = scene.lights[i];
-      if (light instanceof AmbientLight) {
-        ambientColor.r += light.color.r * light.intensity;
-        ambientColor.g += light.color.g * light.intensity;
-        ambientColor.b += light.color.b * light.intensity;
-      } else if (light instanceof DirectionalLight) {
-        dirLightColor.copy(light.color).multiplyScalar(light.intensity);
-        const dir = light.updateDirection();
-        dirLightDir = dir.toArray();
-      } else if (light instanceof PointLight) {
-        ptLightColor.copy(light.color).multiplyScalar(light.intensity);
-        ptLightPos = light.position.toArray();
-        ptLightDist = light.distance;
-      }
-    }
+    const ambientColor = lightingData.ambient;
+    const dirLightColor = lightingData.dirColor;
+    const dirLightDir = lightingData.dirDirection;
+    const ptLight = lightingData.pointLights[0] || {
+      color: new Color(0, 0, 0),
+      position: [0, 0, 0],
+      distance: 10
+    };
 
     // 4. Render all renderable 3D Objects
     for (let i = 0; i < scene.objects.length; i++) {
@@ -145,9 +135,10 @@ export class WebGLRenderer {
         ambientColor,
         dirLightColor,
         dirLightDir,
-        ptLightColor,
-        ptLightPos,
-        ptLightDist
+        ptLightColor: ptLight.color,
+        ptLightPos: ptLight.position,
+        ptLightDist: ptLight.distance,
+        lightingData
       });
     }
   }

@@ -59,6 +59,7 @@ export { WireframeMaterial } from './materials/WireframeMaterial';
 export { NormalMaterial } from './materials/NormalMaterial';
 export { QuantumMaterial } from './materials/QuantumMaterial';
 export { TextureMaterial, type TextureMaterialOptions } from './materials/TextureMaterial';
+export { PhysicalMaterial, type PhysicalMaterialConfig } from './materials/PhysicalMaterial';
 
 // 6. Textures & Procedural Generators
 export { Texture, type TextureWrapMode, type TextureFilterMode, type TextureFormat, type TextureDataType } from './textures/Texture';
@@ -72,6 +73,14 @@ export { Light } from './lights/Light';
 export { AmbientLight } from './lights/AmbientLight';
 export { DirectionalLight } from './lights/DirectionalLight';
 export { PointLight } from './lights/PointLight';
+export { SpotLight } from './lights/SpotLight';
+export { HemisphereLight } from './lights/HemisphereLight';
+export { LightManager, type LightingData } from './lights/LightManager';
+
+// 8. Physics Engine & Collision Dynamics
+export { RigidBody, type BodyType, type RigidBodyConfig } from './physics/RigidBody';
+export { PhysicsWorld, type PhysicsWorldConfig } from './physics/PhysicsWorld';
+export { Raycaster, type Intersection } from './physics/Raycaster';
 
 // 7. Cameras & Controls
 export { Camera } from './cameras/Camera';
