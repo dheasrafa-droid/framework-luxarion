@@ -5,6 +5,10 @@
  */
 
 import { LuxarionDemo } from './ExampleRegistry';
+import { Demo3DTextureGallery } from './Demo3DTextureGallery';
+import { Demo3DNormalBumpRelief } from './Demo3DNormalBumpRelief';
+import { Demo3DAnimatedMatrixMonolith } from './Demo3DAnimatedMatrixMonolith';
+import { Demo3DCyberHexSphere } from './Demo3DCyberHexSphere';
 import { Demo3DGalacticSingularity } from './Demo3DGalacticSingularity';
 import { Demo3DProceduralTerrain } from './Demo3DProceduralTerrain';
 import { Demo3DQuantumSuperposition } from './Demo3DQuantumSuperposition';
@@ -21,6 +25,10 @@ import { Demo2DNeuralNetwork } from './Demo2DNeuralNetwork';
 import { Demo2DBlackHole } from './Demo2DBlackHole';
 
 export const ALL_DEMOS: LuxarionDemo[] = [
+  Demo3DTextureGallery,
+  Demo3DNormalBumpRelief,
+  Demo3DAnimatedMatrixMonolith,
+  Demo3DCyberHexSphere,
   Demo3DGalacticSingularity,
   Demo3DProceduralTerrain,
   Demo3DQuantumSuperposition,
@@ -39,6 +47,10 @@ export const ALL_DEMOS: LuxarionDemo[] = [
 
 export {
   type LuxarionDemo,
+  Demo3DTextureGallery,
+  Demo3DNormalBumpRelief,
+  Demo3DAnimatedMatrixMonolith,
+  Demo3DCyberHexSphere,
   Demo3DGalacticSingularity,
   Demo3DProceduralTerrain,
   Demo3DQuantumSuperposition,

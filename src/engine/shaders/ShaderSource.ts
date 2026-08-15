@@ -335,4 +335,157 @@ export class ShaderSource {
       gl_FragColor = vec4(vColor.rgb, alpha);
     }
   `;
+
+  // Textured Phong Shader with Normal Mapping & UV Tiling
+  public static readonly TEXTURED_PHONG_VERTEX = `
+    attribute vec3 position;
+    attribute vec3 normal;
+    attribute vec2 uv;
+
+    uniform mat4 modelMatrix;
+    uniform mat4 viewMatrix;
+    uniform mat4 projectionMatrix;
+    uniform mat3 normalMatrix;
+
+    uniform vec2 uUvScale;
+    uniform vec2 uUvOffset;
+
+    varying vec3 vNormal;
+    varying vec3 vWorldPosition;
+    varying vec2 vUv;
+
+    void main() {
+      vUv = uv * uUvScale + uUvOffset;
+      vNormal = normalize(normalMatrix * normal);
+      vec4 worldPos = modelMatrix * vec4(position, 1.0);
+      vWorldPosition = worldPos.xyz;
+      gl_Position = projectionMatrix * viewMatrix * worldPos;
+    }
+  `;
+
+  public static readonly TEXTURED_PHONG_FRAGMENT = `
+    precision mediump float;
+
+    uniform vec3 ambientLightColor;
+    uniform vec3 dirLightColor;
+    uniform vec3 dirLightDirection;
+    uniform vec3 pointLightColor;
+    uniform vec3 pointLightPosition;
+    uniform float pointLightDistance;
+
+    uniform vec4 diffuseColor;
+    uniform vec3 specularColor;
+    uniform float shininess;
+    uniform vec3 cameraPosition;
+    uniform float opacity;
+
+    uniform sampler2D uMap;
+    uniform float uHasMap;
+    uniform sampler2D uNormalMap;
+    uniform float uHasNormalMap;
+    uniform float uNormalScale;
+
+    uniform sampler2D uEmissiveMap;
+    uniform float uHasEmissiveMap;
+    uniform vec3 uEmissiveColor;
+
+    varying vec3 vNormal;
+    varying vec3 vWorldPosition;
+    varying vec2 vUv;
+
+    void main() {
+      vec3 N = normalize(vNormal);
+
+      // Perturb normal with Normal Map if present
+      if (uHasNormalMap > 0.5) {
+        vec3 mapN = texture2D(uNormalMap, vUv).xyz * 2.0 - 1.0;
+        mapN.xy *= uNormalScale;
+        N = normalize(N + mapN);
+      }
+
+      vec3 V = normalize(cameraPosition - vWorldPosition);
+
+      // Base diffuse color
+      vec4 baseColor = diffuseColor;
+      if (uHasMap > 0.5) {
+        vec4 texCol = texture2D(uMap, vUv);
+        baseColor *= texCol;
+      }
+
+      // Ambient
+      vec3 ambient = ambientLightColor * baseColor.rgb;
+
+      // Directional Light
+      vec3 L_dir = normalize(-dirLightDirection);
+      float diff_dir = max(dot(N, L_dir), 0.0);
+      vec3 diffuse_dir = dirLightColor * diff_dir * baseColor.rgb;
+
+      vec3 H_dir = normalize(L_dir + V);
+      float spec_dir = pow(max(dot(N, H_dir), 0.0), max(shininess, 1.0));
+      vec3 specular_dir = dirLightColor * spec_dir * specularColor;
+
+      // Point Light
+      vec3 L_pt = pointLightPosition - vWorldPosition;
+      float dist_pt = length(L_pt);
+      L_pt = normalize(L_pt);
+      float attenuation = clamp(1.0 - dist_pt / max(pointLightDistance, 0.001), 0.0, 1.0);
+      attenuation = attenuation * attenuation;
+
+      float diff_pt = max(dot(N, L_pt), 0.0);
+      vec3 diffuse_pt = pointLightColor * diff_pt * baseColor.rgb * attenuation;
+
+      vec3 H_pt = normalize(L_pt + V);
+      float spec_pt = pow(max(dot(N, H_pt), 0.0), max(shininess, 1.0));
+      vec3 specular_pt = pointLightColor * spec_pt * specularColor * attenuation;
+
+      // Emissive
+      vec3 emissive = uEmissiveColor;
+      if (uHasEmissiveMap > 0.5) {
+        emissive *= texture2D(uEmissiveMap, vUv).rgb;
+      }
+
+      vec3 finalColor = ambient + diffuse_dir + specular_dir + diffuse_pt + specular_pt + emissive;
+      gl_FragColor = vec4(finalColor, baseColor.a * opacity);
+    }
+  `;
+
+  // Textured Basic Unlit Shader
+  public static readonly TEXTURED_BASIC_VERTEX = `
+    attribute vec3 position;
+    attribute vec2 uv;
+
+    uniform mat4 modelMatrix;
+    uniform mat4 viewMatrix;
+    uniform mat4 projectionMatrix;
+
+    uniform vec2 uUvScale;
+    uniform vec2 uUvOffset;
+
+    varying vec2 vUv;
+
+    void main() {
+      vUv = uv * uUvScale + uUvOffset;
+      gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
+    }
+  `;
+
+  public static readonly TEXTURED_BASIC_FRAGMENT = `
+    precision mediump float;
+
+    uniform vec4 diffuseColor;
+    uniform float opacity;
+    uniform sampler2D uMap;
+    uniform float uHasMap;
+
+    varying vec2 vUv;
+
+    void main() {
+      vec4 col = diffuseColor;
+      if (uHasMap > 0.5) {
+        col *= texture2D(uMap, vUv);
+      }
+      col.a *= opacity;
+      gl_FragColor = col;
+    }
+  `;
 }

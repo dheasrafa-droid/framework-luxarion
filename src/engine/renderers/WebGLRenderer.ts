@@ -238,7 +238,22 @@ export class WebGLRenderer {
     const uPtDist = program.uniforms.get('pointLightDistance');
     if (uPtDist) gl.uniform1f(uPtDist, lighting.ptLightDist);
 
+    // Texture Unit Bindings
+    const matAny = material as any;
+    if (matAny.map && typeof matAny.map.bind === 'function') {
+      matAny.map.bind(gl, 0);
+    }
+    if (matAny.normalMap && typeof matAny.normalMap.bind === 'function') {
+      matAny.normalMap.bind(gl, 1);
+    }
+    if (matAny.emissiveMap && typeof matAny.emissiveMap.bind === 'function') {
+      matAny.emissiveMap.bind(gl, 2);
+    }
+
     // Custom Material Uniforms
+    if (typeof matAny.updateUniforms === 'function') {
+      matAny.updateUniforms();
+    }
     program.setUniforms(material.uniforms);
 
     // Draw Calls

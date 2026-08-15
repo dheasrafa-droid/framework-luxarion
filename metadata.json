@@ -1,6 +1,6 @@
 {
   "name": "Luxarion 2D/3D Engine Architecture",
-  "description": "Zero-dependency pure 2D/3D WebGL engine with 14 interactive visual experiences: galactic singularities, procedural noise terrain, quantum superposition, vector flow fields, celestial orreries, and black hole physics.",
+  "description": "Zero-dependency pure 2D/3D WebGL engine with procedural texture generation, normal bump mapping, matrix glyph stream textures, and 18 interactive visual experiences.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

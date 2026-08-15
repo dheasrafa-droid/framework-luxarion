@@ -58,8 +58,16 @@ export { HologramMaterial } from './materials/HologramMaterial';
 export { WireframeMaterial } from './materials/WireframeMaterial';
 export { NormalMaterial } from './materials/NormalMaterial';
 export { QuantumMaterial } from './materials/QuantumMaterial';
+export { TextureMaterial, type TextureMaterialOptions } from './materials/TextureMaterial';
 
-// 6. Lights
+// 6. Textures & Procedural Generators
+export { Texture, type TextureWrapMode, type TextureFilterMode, type TextureFormat, type TextureDataType } from './textures/Texture';
+export { CanvasTexture } from './textures/CanvasTexture';
+export { DataTexture } from './textures/DataTexture';
+export { TextureGenerator } from './textures/TextureGenerator';
+export { TextureLoader } from './textures/TextureLoader';
+
+// 7. Lights
 export { Light } from './lights/Light';
 export { AmbientLight } from './lights/AmbientLight';
 export { DirectionalLight } from './lights/DirectionalLight';
