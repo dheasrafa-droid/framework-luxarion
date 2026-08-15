@@ -5,6 +5,8 @@
  */
 
 import { LuxarionDemo } from './ExampleRegistry';
+import { Demo3DDevGridLevel } from './Demo3DDevGridLevel';
+import { Demo3DCyberGridCorridor } from './Demo3DCyberGridCorridor';
 import { Demo3DSpotlightStudio } from './Demo3DSpotlightStudio';
 import { Demo3DPhysicsBilliards } from './Demo3DPhysicsBilliards';
 import { Demo3DTextureGallery } from './Demo3DTextureGallery';
@@ -27,6 +29,8 @@ import { Demo2DNeuralNetwork } from './Demo2DNeuralNetwork';
 import { Demo2DBlackHole } from './Demo2DBlackHole';
 
 export const ALL_DEMOS: LuxarionDemo[] = [
+  Demo3DDevGridLevel,
+  Demo3DCyberGridCorridor,
   Demo3DSpotlightStudio,
   Demo3DPhysicsBilliards,
   Demo3DTextureGallery,
@@ -51,6 +55,8 @@ export const ALL_DEMOS: LuxarionDemo[] = [
 
 export {
   type LuxarionDemo,
+  Demo3DDevGridLevel,
+  Demo3DCyberGridCorridor,
   Demo3DSpotlightStudio,
   Demo3DPhysicsBilliards,
   Demo3DTextureGallery,

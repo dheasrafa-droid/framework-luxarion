@@ -6,6 +6,7 @@
 import { runMathUnitTests } from './unit/MathUtils.test';
 import { runGeometryUnitTests } from './unit/Geometries.test';
 import { runPhysicsUnitTests } from './unit/Physics.test';
+import { runArchitecturalUnitTests } from './unit/ArchitecturalGeometries.test';
 import { runSceneGraphIntegrationTests } from './integration/SceneGraph.test';
 
 console.log('\n🧪 Running Luxarion Test Suite...\n');
@@ -13,6 +14,7 @@ console.log('\n🧪 Running Luxarion Test Suite...\n');
 const allTests = [
   ...runMathUnitTests(),
   ...runGeometryUnitTests(),
+  ...runArchitecturalUnitTests(),
   ...runPhysicsUnitTests(),
   ...runSceneGraphIntegrationTests()
 ];

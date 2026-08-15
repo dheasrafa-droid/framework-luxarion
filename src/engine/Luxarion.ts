@@ -87,8 +87,19 @@ export { Camera } from './cameras/Camera';
 export { PerspectiveCamera } from './cameras/PerspectiveCamera';
 export { OrthographicCamera } from './cameras/OrthographicCamera';
 export { OrbitControls } from './cameras/OrbitControls';
+export { FirstPersonControls, type FPSControlsConfig } from './controls/FirstPersonControls';
 
-// 8. Scene & Renderers (Master Orchestrators)
+// 8. Architectural & Level Design Geometries
+export { StaircaseGeometry } from './geometries/StaircaseGeometry';
+export { ArchGeometry } from './geometries/ArchGeometry';
+export { WedgeGeometry } from './geometries/WedgeGeometry';
+export { PillarGeometry } from './geometries/PillarGeometry';
+
+// 9. Level Design Materials & Builders
+export { DevGridMaterial, type DevGridStyle, type DevGridMaterialConfig } from './materials/DevGridMaterial';
+export { ModularLevelBuilder } from './level/ModularLevelBuilder';
+
+// 10. Scene & Renderers (Master Orchestrators)
 export { Scene } from './scene/Scene';
 export { WebGLRenderer } from './renderers/WebGLRenderer';
 export { RenderPipeline } from './renderers/RenderPipeline';
