@@ -95,8 +95,9 @@ export { ArchGeometry } from './geometries/ArchGeometry';
 export { WedgeGeometry } from './geometries/WedgeGeometry';
 export { PillarGeometry } from './geometries/PillarGeometry';
 
-// 9. Level Design Materials & Builders
+// 9. Level Design Materials, Textures & Builders
 export { DevGridMaterial, type DevGridStyle, type DevGridMaterialConfig } from './materials/DevGridMaterial';
+export { DevTextureGenerator, type DevTextureType } from './textures/DevTextureGenerator';
 export { ModularLevelBuilder } from './level/ModularLevelBuilder';
 
 // 10. Scene & Renderers (Master Orchestrators)

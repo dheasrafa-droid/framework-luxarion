@@ -367,6 +367,10 @@ export class ShaderSource {
     precision mediump float;
 
     uniform vec3 ambientLightColor;
+    uniform vec3 hemiSkyColor;
+    uniform vec3 hemiGroundColor;
+    uniform float hasHemi;
+
     uniform vec3 dirLightColor;
     uniform vec3 dirLightDirection;
     uniform vec3 pointLightColor;
@@ -412,8 +416,13 @@ export class ShaderSource {
         baseColor *= texCol;
       }
 
-      // Ambient
+      // Ambient & Hemisphere Lighting
       vec3 ambient = ambientLightColor * baseColor.rgb;
+      if (hasHemi > 0.5) {
+        float hemiTerm = dot(N, vec3(0.0, 1.0, 0.0)) * 0.5 + 0.5;
+        vec3 hemiLight = mix(hemiGroundColor, hemiSkyColor, hemiTerm);
+        ambient = hemiLight * baseColor.rgb;
+      }
 
       // Directional Light
       vec3 L_dir = normalize(-dirLightDirection);
@@ -486,6 +495,127 @@ export class ShaderSource {
       }
       col.a *= opacity;
       gl_FragColor = col;
+    }
+  `;
+
+  // Triplanar Dev-Grid Level Design Shader (Seamless World UV Mapping & Ambient Occlusion)
+  public static readonly DEV_TRIPLANAR_VERTEX = `
+    attribute vec3 position;
+    attribute vec3 normal;
+    attribute vec2 uv;
+
+    uniform mat4 modelMatrix;
+    uniform mat4 viewMatrix;
+    uniform mat4 projectionMatrix;
+    uniform mat3 normalMatrix;
+
+    varying vec3 vNormal;
+    varying vec3 vWorldPosition;
+    varying vec3 vObjectPosition;
+    varying vec2 vUv;
+
+    void main() {
+      vUv = uv;
+      vObjectPosition = position;
+      vNormal = normalize(normalMatrix * normal);
+      vec4 worldPos = modelMatrix * vec4(position, 1.0);
+      vWorldPosition = worldPos.xyz;
+      gl_Position = projectionMatrix * viewMatrix * worldPos;
+    }
+  `;
+
+  public static readonly DEV_TRIPLANAR_FRAGMENT = `
+    precision mediump float;
+
+    uniform vec3 ambientLightColor;
+    uniform vec3 hemiSkyColor;
+    uniform vec3 hemiGroundColor;
+    uniform float hasHemi;
+
+    uniform vec3 dirLightColor;
+    uniform vec3 dirLightDirection;
+    uniform vec3 pointLightColor;
+    uniform vec3 pointLightPosition;
+    uniform float pointLightDistance;
+
+    uniform vec4 diffuseColor;
+    uniform vec3 specularColor;
+    uniform float shininess;
+    uniform vec3 cameraPosition;
+    uniform float opacity;
+
+    uniform vec2 uUvScale;
+    uniform vec2 uUvOffset;
+    uniform float uTriplanarMode;
+    uniform float uGridScale;
+
+    uniform sampler2D uMap;
+    uniform float uHasMap;
+
+    varying vec3 vNormal;
+    varying vec3 vWorldPosition;
+    varying vec3 vObjectPosition;
+    varying vec2 vUv;
+
+    void main() {
+      vec3 N = normalize(vNormal);
+      vec3 V = normalize(cameraPosition - vWorldPosition);
+
+      vec4 texColor = vec4(1.0);
+
+      if (uHasMap > 0.5) {
+        if (uTriplanarMode > 0.5) {
+          // World Space Triplanar Mapping: 1.0 Tile = uGridScale meters (default 1.0 or 2.0)
+          float scale = max(uGridScale, 0.1);
+          vec2 uvX = vWorldPosition.zy / scale;
+          vec2 uvY = vWorldPosition.xz / scale;
+          vec2 uvZ = vWorldPosition.xy / scale;
+
+          vec3 blend = abs(N);
+          blend = pow(blend, vec3(5.0));
+          blend /= (blend.x + blend.y + blend.z);
+
+          vec4 colX = texture2D(uMap, uvX);
+          vec4 colY = texture2D(uMap, uvY);
+          vec4 colZ = texture2D(uMap, uvZ);
+
+          texColor = colX * blend.x + colY * blend.y + colZ * blend.z;
+        } else {
+          texColor = texture2D(uMap, vUv * uUvScale + uUvOffset);
+        }
+      }
+
+      vec4 baseColor = diffuseColor * texColor;
+
+      // Realistic Sky/Ground Hemisphere Ambient
+      vec3 ambient = ambientLightColor * baseColor.rgb;
+      if (hasHemi > 0.5) {
+        float hemiTerm = dot(N, vec3(0.0, 1.0, 0.0)) * 0.5 + 0.5;
+        vec3 hemiLight = mix(hemiGroundColor, hemiSkyColor, hemiTerm);
+        ambient = hemiLight * baseColor.rgb;
+      }
+
+      // Directional Sun Light
+      vec3 L_dir = normalize(-dirLightDirection);
+      float diff_dir = max(dot(N, L_dir), 0.0);
+      vec3 diffuse_dir = dirLightColor * diff_dir * baseColor.rgb;
+
+      vec3 H_dir = normalize(L_dir + V);
+      float spec_dir = pow(max(dot(N, H_dir), 0.0), max(shininess, 2.0));
+      vec3 specular_dir = dirLightColor * spec_dir * specularColor * 0.35;
+
+      // Point Light with Quadratic Soft Attenuation
+      vec3 L_pt = pointLightPosition - vWorldPosition;
+      float dist_pt = length(L_pt);
+      L_pt = normalize(L_pt);
+      float attenuation = clamp(1.0 - dist_pt / max(pointLightDistance, 0.001), 0.0, 1.0);
+      attenuation = attenuation * attenuation;
+
+      float diff_pt = max(dot(N, L_pt), 0.0);
+      vec3 diffuse_pt = pointLightColor * diff_pt * baseColor.rgb * attenuation;
+
+      vec3 finalColor = ambient + diffuse_dir + specular_dir + diffuse_pt;
+      gl_FragColor = vec4(finalColor, baseColor.a * opacity);
     }
   `;
 }

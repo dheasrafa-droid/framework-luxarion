@@ -214,6 +214,15 @@ export class WebGLRenderer {
     const uAmb = program.uniforms.get('ambientLightColor');
     if (uAmb) gl.uniform3fv(uAmb, lighting.ambientColor.toRGBArray());
 
+    const uHasHemi = program.uniforms.get('hasHemi');
+    if (uHasHemi) gl.uniform1f(uHasHemi, lighting.lightingData?.hasHemi ? 1.0 : 0.0);
+
+    const uHemiSky = program.uniforms.get('hemiSkyColor');
+    if (uHemiSky && lighting.lightingData?.hasHemi) gl.uniform3fv(uHemiSky, lighting.lightingData.hemiSky.toRGBArray());
+
+    const uHemiGnd = program.uniforms.get('hemiGroundColor');
+    if (uHemiGnd && lighting.lightingData?.hasHemi) gl.uniform3fv(uHemiGnd, lighting.lightingData.hemiGround.toRGBArray());
+
     const uDirCol = program.uniforms.get('dirLightColor');
     if (uDirCol) gl.uniform3fv(uDirCol, lighting.dirLightColor.toRGBArray());
 

@@ -70,6 +70,11 @@ export class LightManager {
         data.hemiSky.copy(l.skyColor).multiplyScalar(l.intensity);
         data.hemiGround.copy(l.groundColor).multiplyScalar(l.intensity);
         data.hemiDirection = l.direction.toArray();
+
+        // Also blend a portion into fallback ambient
+        data.ambient.r += (data.hemiSky.r * 0.5 + data.hemiGround.r * 0.3);
+        data.ambient.g += (data.hemiSky.g * 0.5 + data.hemiGround.g * 0.3);
+        data.ambient.b += (data.hemiSky.b * 0.5 + data.hemiGround.b * 0.3);
       } else if (l instanceof DirectionalLight) {
         data.hasDir = true;
         data.dirColor.copy(l.color).multiplyScalar(l.intensity);

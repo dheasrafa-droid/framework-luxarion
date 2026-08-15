@@ -60,14 +60,14 @@ export const EngineViewport: React.FC<EngineViewportProps> = ({
   }, [isPlaying]);
 
   const categories = [
-    { id: 'all', label: 'All (10)' },
-    { id: '3d', label: '3D Spatial' },
-    { id: 'space', label: 'Celestial' },
+    { id: 'all', label: `All (${ALL_DEMOS.length})` },
+    { id: '3d', label: '3D Spatial & Levels' },
+    { id: 'space', label: 'Celestial & Space' },
     { id: 'audio', label: 'Audio Matrix' },
-    { id: 'quantum', label: 'Quantum' },
+    { id: 'quantum', label: 'Quantum Physics' },
     { id: 'matrix', label: 'Hyperspace' },
     { id: 'hologram', label: 'Holographic' },
-    { id: '2d', label: '2D Particles' },
+    { id: '2d', label: '2D Particle Fields' },
     { id: 'simulation', label: 'Relativity' }
   ];
 
@@ -418,7 +418,19 @@ export const EngineViewport: React.FC<EngineViewportProps> = ({
             {activeDemo.description}
           </p>
           <div className="text-[10px] font-mono text-cyan-300/90 border-t border-white/10 pt-2 flex flex-col gap-1">
-            {activeDemo.id === '2d-black-hole' ? (
+            {activeDemo.id === '3d-devgrid-level' ? (
+              <>
+                <span>• Left Drag: Orbit Dev-Texture Graybox Arena</span>
+                <span>• Scroll Wheel: Smooth Zoom into Pit & Stairways</span>
+                <span>• Level Features: Sunken Courtyard, Roman Archways, Dev-Pillars</span>
+              </>
+            ) : activeDemo.id === '3d-cybergrid-corridor' ? (
+              <>
+                <span>• Left Drag: Orbit Cyberpunk Wireframe Tunnel</span>
+                <span>• Glowing Lanes: Yellow floor tracks, Cyan & Orange wall lines</span>
+                <span>• Light Dynamics: Multi-color moving neon pulses</span>
+              </>
+            ) : activeDemo.id === '2d-black-hole' ? (
               <>
                 <span>• Drag: Move Singularity Point</span>
                 <span>• Doppler Beaming: Left = Blueshift, Right = Redshift</span>
@@ -469,7 +481,7 @@ export const EngineViewport: React.FC<EngineViewportProps> = ({
                 <Sparkles className="w-5 h-5 text-cyan-400" />
                 <h2 className="text-base font-bold text-white">Visual Experience Catalog</h2>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-mono">
-                  10 Demos
+                  {ALL_DEMOS.length} Demos
                 </span>
               </div>
               <button
