@@ -38,6 +38,7 @@ export class HologramMaterial extends Material {
     this.transparent = true;
     this.depthWrite = false;
     this.blendMode = 'additive';
+    this.side = 'double';
 
     this.vertexShaderSource = ShaderSource.HOLOGRAM_VERTEX;
     this.fragmentShaderSource = ShaderSource.HOLOGRAM_FRAGMENT;

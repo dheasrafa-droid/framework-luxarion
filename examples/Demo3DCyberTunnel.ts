@@ -49,12 +49,13 @@ export const Demo3DCyberTunnel: LuxarionDemo = {
     const RING_SPACING = 2.5;
     const TUNNEL_LENGTH = RING_COUNT * RING_SPACING;
 
-    const ringGeo = new TorusGeometry(3.0, 0.08, 16, 36);
+    const ringGeo = new TorusGeometry(3.0, 0.14, 16, 40);
     const ringMat = new HologramMaterial({
       color: theme.accent,
-      fresnelPower: 1.8,
-      scanlineDensity: 24.0,
-      glitchIntensity: 0.5
+      fresnelPower: 1.5,
+      scanlineDensity: 20.0,
+      glitchIntensity: 0.6,
+      opacity: 0.95
     });
 
     const rings: Object3D[] = [];

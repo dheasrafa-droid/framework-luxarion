@@ -149,7 +149,7 @@ export class ShaderSource {
       vec3 pos = position;
       // Procedural slight pulse glitch
       if (uGlitchIntensity > 0.0) {
-        float noise = sin(pos.y * 10.0 + uTime * 8.0) * 0.02 * uGlitchIntensity;
+        float noise = sin(pos.y * 10.0 + uTime * 6.0) * 0.02 * uGlitchIntensity;
         pos.x += noise;
       }
 
@@ -177,19 +177,24 @@ export class ShaderSource {
       vec3 N = normalize(vNormal);
       vec3 V = normalize(cameraPosition - vWorldPosition);
 
-      // Fresnel Rim Effect
-      float fresnel = 1.0 - abs(dot(V, N));
-      fresnel = pow(fresnel, uFresnelPower);
+      // Fresnel Rim Effect (Luminous outer boundary glow)
+      float NdotV = abs(dot(V, N));
+      float fresnel = clamp(1.0 - NdotV, 0.0, 1.0);
+      float fresnelFactor = pow(fresnel, max(uFresnelPower, 0.2));
 
-      // Scanline animation
-      float scanline = sin(vWorldPosition.y * uScanlineDensity - uTime * 6.0) * 0.5 + 0.5;
-      scanline = pow(scanline, 1.8);
+      // Dynamic animated scanlines
+      float scanDensity = max(uScanlineDensity, 5.0);
+      float scanline = sin(vWorldPosition.y * scanDensity - uTime * 5.0) * 0.5 + 0.5;
+      float scanlineTerm = pow(scanline, 1.4) * 0.35;
 
       // Internal lattice grid
-      float grid = (sin(vUv.x * 40.0) * sin(vUv.y * 40.0)) * 0.2 + 0.8;
+      float grid = (sin(vUv.x * 24.0) * sin(vUv.y * 24.0)) * 0.2 + 0.8;
 
-      float alpha = (fresnel * 1.4 + scanline * 0.4 + 0.15) * grid * opacity;
-      vec3 glowColor = uColor + vec3(0.2, 0.4, 0.5) * fresnel;
+      // High-radiance volumetric glow
+      vec3 glowColor = uColor * (0.85 + fresnelFactor * 1.6 + scanlineTerm);
+      glowColor += vec3(0.3, 0.5, 0.7) * fresnelFactor;
+
+      float alpha = (0.3 + fresnelFactor * 0.7 + scanlineTerm * 0.3) * grid * opacity;
 
       gl_FragColor = vec4(glowColor, clamp(alpha, 0.0, 1.0));
     }
@@ -218,11 +223,7 @@ export class ShaderSource {
     varying vec2 vUv;
 
     void main() {
-      vec2 grid = abs(fract(vUv * 16.0 - 0.5) - 0.5) / fwidth(vUv * 16.0);
-      float line = min(grid.x, grid.y);
-      float c = 1.0 - min(line, 1.0);
-      if (c < 0.1) discard;
-      gl_FragColor = vec4(uLineColor.rgb, uLineColor.a * c);
+      gl_FragColor = uLineColor;
     }
   `;
 
