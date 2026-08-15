@@ -9,7 +9,8 @@ import { Scene, Camera, WebGLRenderer, Canvas2DRenderer, ThemeManager } from '..
 export interface LuxarionDemo {
   id: string;
   name: string;
-  category: '3d' | '2d' | 'hologram' | 'matrix';
+  category: '3d' | '2d' | 'hologram' | 'matrix' | 'space' | 'simulation' | 'audio' | 'quantum';
+  is2D?: boolean;
   description: string;
   init: (
     glRenderer: WebGLRenderer | null,
