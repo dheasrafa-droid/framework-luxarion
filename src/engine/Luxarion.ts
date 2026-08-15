@@ -31,6 +31,7 @@ export { Transform } from './core/Transform';
 export { Node } from './core/Node';
 export { Object3D } from './core/Object3D';
 export { Object2D } from './core/Object2D';
+export { App, type AppOptions } from './core/App';
 
 // 3. Shaders & WebGL Pipeline
 export { ShaderSource } from './shaders/ShaderSource';
