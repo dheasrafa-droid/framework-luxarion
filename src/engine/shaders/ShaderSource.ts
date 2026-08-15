@@ -227,6 +227,83 @@ export class ShaderSource {
     }
   `;
 
+  // Normal Vector Visualization Shader
+  public static readonly NORMAL_VERTEX = `
+    attribute vec3 position;
+    attribute vec3 normal;
+    uniform mat4 modelMatrix;
+    uniform mat4 viewMatrix;
+    uniform mat4 projectionMatrix;
+    uniform mat3 normalMatrix;
+
+    varying vec3 vNormal;
+
+    void main() {
+      vNormal = normalize(normalMatrix * normal);
+      gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
+    }
+  `;
+
+  public static readonly NORMAL_FRAGMENT = `
+    precision mediump float;
+    varying vec3 vNormal;
+    uniform float opacity;
+
+    void main() {
+      vec3 normColor = vNormal * 0.5 + 0.5;
+      gl_FragColor = vec4(normColor, opacity);
+    }
+  `;
+
+  // Quantum Wave Luminescence Shader
+  public static readonly QUANTUM_VERTEX = `
+    attribute vec3 position;
+    attribute vec3 normal;
+    attribute vec2 uv;
+
+    uniform mat4 modelMatrix;
+    uniform mat4 viewMatrix;
+    uniform mat4 projectionMatrix;
+    uniform mat3 normalMatrix;
+    uniform float uTime;
+    uniform float uPhase;
+
+    varying vec3 vNormal;
+    varying vec3 vPosition;
+    varying vec2 vUv;
+
+    void main() {
+      vUv = uv;
+      vNormal = normalize(normalMatrix * normal);
+      vec3 pos = position;
+      // Quantum surface interference wave
+      float wave = sin(pos.x * 4.0 + uTime * 3.0 + uPhase) * cos(pos.y * 4.0 + uTime * 2.0) * 0.08;
+      pos += normal * wave;
+      vPosition = pos;
+      gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(pos, 1.0);
+    }
+  `;
+
+  public static readonly QUANTUM_FRAGMENT = `
+    precision mediump float;
+    varying vec3 vNormal;
+    varying vec3 vPosition;
+    varying vec2 vUv;
+
+    uniform vec3 uColorA;
+    uniform vec3 uColorB;
+    uniform float uTime;
+    uniform float opacity;
+
+    void main() {
+      float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.2);
+      float pattern = sin(vPosition.y * 10.0 + uTime * 2.0) * 0.5 + 0.5;
+      vec3 col = mix(uColorA, uColorB, pattern + fresnel * 0.6);
+      col += vec3(fresnel * 0.8);
+      gl_FragColor = vec4(col, opacity);
+    }
+  `;
+
   // Particle Point Shader
   public static readonly PARTICLE_VERTEX = `
     attribute vec3 position;

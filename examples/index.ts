@@ -5,6 +5,10 @@
  */
 
 import { LuxarionDemo } from './ExampleRegistry';
+import { Demo3DGalacticSingularity } from './Demo3DGalacticSingularity';
+import { Demo3DProceduralTerrain } from './Demo3DProceduralTerrain';
+import { Demo3DQuantumSuperposition } from './Demo3DQuantumSuperposition';
+import { Demo2DVectorFlowField } from './Demo2DVectorFlowField';
 import { Demo3DCrystals } from './Demo3DCrystals';
 import { Demo3DPlanetarySystem } from './Demo3DPlanetarySystem';
 import { Demo3DAudioVisualizer } from './Demo3DAudioVisualizer';
@@ -17,6 +21,10 @@ import { Demo2DNeuralNetwork } from './Demo2DNeuralNetwork';
 import { Demo2DBlackHole } from './Demo2DBlackHole';
 
 export const ALL_DEMOS: LuxarionDemo[] = [
+  Demo3DGalacticSingularity,
+  Demo3DProceduralTerrain,
+  Demo3DQuantumSuperposition,
+  Demo2DVectorFlowField,
   Demo3DCrystals,
   Demo3DPlanetarySystem,
   Demo3DAudioVisualizer,
@@ -31,6 +39,10 @@ export const ALL_DEMOS: LuxarionDemo[] = [
 
 export {
   type LuxarionDemo,
+  Demo3DGalacticSingularity,
+  Demo3DProceduralTerrain,
+  Demo3DQuantumSuperposition,
+  Demo2DVectorFlowField,
   Demo3DCrystals,
   Demo3DPlanetarySystem,
   Demo3DAudioVisualizer,

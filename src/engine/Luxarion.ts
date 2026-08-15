@@ -21,6 +21,7 @@ export { Quaternion } from './math/Quaternion';
 export { Euler } from './math/Euler';
 export { Color } from './math/Color';
 export { MathUtils } from './math/MathUtils';
+export { Noise } from './math/Noise';
 
 // 2. Core Architecture & Scenegraph
 export { EventDispatcher } from './core/EventDispatcher';
@@ -43,9 +44,11 @@ export { GLState } from './shaders/GLState';
 export { BoxGeometry } from './geometries/BoxGeometry';
 export { SphereGeometry } from './geometries/SphereGeometry';
 export { TorusGeometry } from './geometries/TorusGeometry';
+export { TorusKnotGeometry } from './geometries/TorusKnotGeometry';
 export { CylinderGeometry } from './geometries/CylinderGeometry';
 export { PlaneGeometry } from './geometries/PlaneGeometry';
 export { IcosahedronGeometry } from './geometries/IcosahedronGeometry';
+export { ProceduralTerrainGeometry } from './geometries/ProceduralTerrainGeometry';
 
 // 5. Materials
 export { Material } from './materials/Material';
@@ -53,6 +56,8 @@ export { BasicMaterial } from './materials/BasicMaterial';
 export { PhongMaterial } from './materials/PhongMaterial';
 export { HologramMaterial } from './materials/HologramMaterial';
 export { WireframeMaterial } from './materials/WireframeMaterial';
+export { NormalMaterial } from './materials/NormalMaterial';
+export { QuantumMaterial } from './materials/QuantumMaterial';
 
 // 6. Lights
 export { Light } from './lights/Light';
@@ -75,6 +80,7 @@ export { FrameBuffer } from './renderers/FrameBuffer';
 // 9. 2D Engine & Particles
 export { Canvas2DRenderer } from './renderer2d/Canvas2DRenderer';
 export { ParticleSystem } from './particles/ParticleSystem';
+export { ForceField, type ForceFieldType, type ForceFieldConfig } from './particles/ForceField';
 
 // 10. Themes & Presets
 export { ThemeManager } from './themes/ThemeManager';
