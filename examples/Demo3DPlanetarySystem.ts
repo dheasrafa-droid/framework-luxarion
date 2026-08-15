@@ -235,25 +235,29 @@ export const Demo3DPlanetarySystem: LuxarionDemo = {
     return {
       scene,
       camera,
-      update: (_delta: number, time: number) => {
+      update: (delta: number, time: number) => {
         controls.update();
 
         // Animate Sun Core
         sunMat.updateUniforms(time);
-        sunMesh.rotation.y = time * 0.2;
+        if (delta > 0) {
+          sunMesh.rotateY(delta * 0.3);
+        }
 
-        // Animate Planets and Moons
+        // Animate Planets and Moons via Real-time Quaternion Rotation & Orbiting
         planetInstances.forEach(({ orbitNode, planetMesh, config, moonNodes }) => {
-          // Orbit around sun
-          orbitNode.rotation.y = time * config.orbitSpeed * 0.3;
-          // Self-axial rotation
-          planetMesh.rotation.y = time * config.rotSpeed;
+          if (delta > 0) {
+            // Orbit around sun
+            orbitNode.rotateY(delta * config.orbitSpeed * 0.4);
+            // Self-axial rotation
+            planetMesh.rotateY(delta * config.rotSpeed);
 
-          // Orbit moons around their host planet
-          moonNodes.forEach(m => {
-            m.orbitNode.rotation.y = time * m.speed * 0.5;
-            m.mesh.rotation.y = time * 2.0;
-          });
+            // Orbit moons around their host planet
+            moonNodes.forEach(m => {
+              m.orbitNode.rotateY(delta * m.speed * 0.6);
+              m.mesh.rotateY(delta * 2.0);
+            });
+          }
         });
 
         // Dynamic theme background sync

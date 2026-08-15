@@ -9,6 +9,7 @@ import { Transform } from './Transform';
 import { MathUtils } from '../math/MathUtils';
 import { Vector3 } from '../math/Vector3';
 import { Euler } from '../math/Euler';
+import { Quaternion } from '../math/Quaternion';
 import { Matrix4 } from '../math/Matrix4';
 
 export class Node extends EventDispatcher {
@@ -34,12 +35,46 @@ export class Node extends EventDispatcher {
     return this.transform.rotation;
   }
 
+  public get quaternion(): Quaternion {
+    return this.transform.quaternion;
+  }
+
   public get scale(): Vector3 {
     return this.transform.scale;
   }
 
   public get worldMatrix(): Matrix4 {
     return this.transform.worldMatrix;
+  }
+
+  public rotateOnAxis(axis: Vector3, angle: number): this {
+    this.transform.rotateOnAxis(axis, angle);
+    return this;
+  }
+
+  public rotateX(angle: number): this {
+    this.transform.rotateX(angle);
+    return this;
+  }
+
+  public rotateY(angle: number): this {
+    this.transform.rotateY(angle);
+    return this;
+  }
+
+  public rotateZ(angle: number): this {
+    this.transform.rotateZ(angle);
+    return this;
+  }
+
+  public setRotationFromEuler(euler: Euler): this {
+    this.transform.setRotationFromEuler(euler);
+    return this;
+  }
+
+  public setRotationFromQuaternion(q: Quaternion): this {
+    this.transform.setRotationFromQuaternion(q);
+    return this;
   }
 
   public add(child: Node): this {

@@ -133,30 +133,31 @@ export const Demo3DQuantumTopology: LuxarionDemo = {
     return {
       scene,
       camera,
-      update: (_delta: number, time: number) => {
+      update: (delta: number, time: number) => {
         controls.update();
 
         // Singularity core animation
         coreMat.updateUniforms(time);
-        coreMesh.rotation.x = time * 0.8;
-        coreMesh.rotation.y = time * 1.1;
-        shellMesh.rotation.y = -time * 0.9;
-        shellMesh.rotation.z = time * 0.7;
+        if (delta > 0) {
+          coreMesh.rotateX(delta * 0.8);
+          coreMesh.rotateY(delta * 1.1);
+          shellMesh.rotateY(-delta * 0.9);
+          shellMesh.rotateZ(delta * 0.7);
 
-        // Gimbal multi-axis rotation (Golden ratio based)
-        const PHI = 1.6180339887;
-        ring1.rotation.z = time * 0.6;
-        ring1.rotation.x = Math.sin(time * 0.4) * 0.5;
+          // Gimbal multi-axis rotation (Golden ratio based)
+          const PHI = 1.6180339887;
+          ring1.rotateZ(delta * 0.6);
+          ring1.rotateX(delta * 0.4);
 
-        ring2.rotation.x = Math.PI / 2 + time * 0.6 * PHI;
-        ring2.rotation.y = Math.cos(time * 0.5) * 0.4;
+          ring2.rotateX(delta * 0.6 * PHI);
+          ring2.rotateY(delta * 0.5);
 
-        ring3.rotation.y = Math.PI / 2 + time * 0.4 * (PHI * PHI);
-        ring3.rotation.z = Math.sin(time * 0.7) * 0.3;
+          ring3.rotateY(delta * 0.4 * (PHI * PHI));
+          ring3.rotateZ(delta * 0.3);
 
-        // Faraday cage slow breathing
-        faradayMesh.rotation.y = time * 0.08;
-        faradayMesh.rotation.x = time * 0.05;
+          faradayMesh.rotateY(delta * 0.08);
+          faradayMesh.rotateX(delta * 0.05);
+        }
 
         // Animate Quantum Electrons along orbital trajectories
         electrons.forEach((elec, idx) => {

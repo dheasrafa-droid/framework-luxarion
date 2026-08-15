@@ -104,21 +104,20 @@ export const Demo3DCrystals: LuxarionDemo = {
     return {
       scene,
       camera,
-      update: (_delta: number, time: number) => {
+      update: (delta: number, time: number) => {
         controls.update();
 
-        // Animate Crystal
-        crystalMesh.rotation.y = time * 0.4;
-        crystalMesh.rotation.x = Math.sin(time * 0.3) * 0.2;
-        wireMesh.rotation.y = -time * 0.3;
-        wireMesh.rotation.z = time * 0.2;
+        // Animate Crystal & Rings via Real-time Quaternion Rotation
+        if (delta > 0) {
+          crystalMesh.rotateY(delta * 0.5);
+          crystalMesh.rotateX(delta * 0.25);
+          wireMesh.rotateY(-delta * 0.4);
+          wireMesh.rotateZ(delta * 0.3);
 
-        // Animate Rings
-        torus1.rotation.x = Math.PI / 3 + Math.sin(time * 0.5) * 0.2;
-        torus1.rotation.y = time * 0.6;
-
-        torus2.rotation.x = -Math.PI / 4;
-        torus2.rotation.z = time * 0.4;
+          // Animate Torus Gyroscopic Rings
+          torus1.rotateY(delta * 0.8);
+          torus2.rotateZ(delta * 0.6);
+        }
 
         // Animate Point Light
         pointLight.position.x = Math.sin(time * 1.2) * 4;
@@ -131,8 +130,10 @@ export const Demo3DCrystals: LuxarionDemo = {
           sat.position.x = Math.cos(angle) * radius;
           sat.position.y = Math.sin(time * 1.5 + idx) * 0.8;
           sat.position.z = Math.sin(angle) * radius;
-          sat.rotation.x = time * 2;
-          sat.rotation.y = time * 1.5;
+          if (delta > 0) {
+            sat.rotateX(delta * 2);
+            sat.rotateY(delta * 1.5);
+          }
         });
 
         // Sync colors with Theme

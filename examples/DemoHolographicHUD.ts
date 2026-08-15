@@ -138,7 +138,7 @@ export const DemoHolographicHUD: LuxarionDemo = {
     return {
       scene,
       camera,
-      update: (_delta: number, time: number) => {
+      update: (delta: number, time: number) => {
         controls.update();
 
         // Update Shader Uniforms
@@ -148,22 +148,24 @@ export const DemoHolographicHUD: LuxarionDemo = {
         outerMat.updateUniforms(time);
         needleMat.updateUniforms(time);
 
-        // Core targeting animation
-        coreMesh.rotation.x = time * 0.9;
-        coreMesh.rotation.y = time * 1.3;
+        // Core targeting animation via Quaternion
+        if (delta > 0) {
+          coreMesh.rotateX(delta * 0.9);
+          coreMesh.rotateY(delta * 1.3);
 
-        // Multi-axis gyroscopic gimbal rotations
-        innerRing.rotation.x = time * 1.1;
-        innerRing.rotation.y = Math.sin(time * 0.8) * 0.6;
+          // Multi-axis gyroscopic gimbal rotations
+          innerRing.rotateX(delta * 1.1);
+          innerRing.rotateY(delta * 0.6);
 
-        midRing.rotation.x = Math.PI / 2 + Math.cos(time * 0.6) * 0.5;
-        midRing.rotation.y = time * 0.9;
+          midRing.rotateX(delta * 0.7);
+          midRing.rotateY(delta * 0.9);
 
-        outerRing.rotation.x = -time * 0.4;
-        outerRing.rotation.z = time * 0.7;
+          outerRing.rotateX(-delta * 0.4);
+          outerRing.rotateZ(delta * 0.7);
 
-        // Radar Needle sweep
-        scannerNeedle.rotation.z = -time * 2.2;
+          // Radar Needle sweep
+          scannerNeedle.rotateZ(-delta * 2.2);
+        }
 
         // Horizon Grid gentle wave
         horizonGrid.rotation.z = Math.sin(time * 0.5) * 0.1;

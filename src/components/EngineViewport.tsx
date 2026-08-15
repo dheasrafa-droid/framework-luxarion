@@ -272,14 +272,29 @@ export const EngineViewport: React.FC<EngineViewportProps> = ({
       )}
 
       {/* 2. Floating Action Controls (Bottom Right - Clean & Minimal) */}
-      <div className="absolute bottom-4 right-4 z-20 flex items-center gap-1.5 bg-black/60 backdrop-blur-xl border border-white/15 p-1 rounded-full shadow-2xl transition-opacity">
+      <div className="absolute bottom-4 right-4 z-20 flex items-center gap-1.5 bg-black/70 backdrop-blur-xl border border-white/15 p-1.5 rounded-full shadow-2xl transition-opacity">
         <button
           id="btn-toggle-play"
-          onClick={() => setIsPlaying(!isPlaying)}
-          className="p-2 rounded-full hover:bg-white/10 text-white transition-colors"
-          title={isPlaying ? 'Pause Animation' : 'Resume Animation'}
+          onClick={() => setIsPlaying(prev => !prev)}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all border ${
+            isPlaying
+              ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300 hover:bg-emerald-500/30'
+              : 'bg-amber-500/20 border-amber-500/60 text-amber-300 hover:bg-amber-500/30 animate-pulse'
+          }`}
+          title={isPlaying ? 'Jeda Rotasi (Pause)' : 'Putar Objek (Play)'}
+          aria-label={isPlaying ? 'Pause Animation' : 'Play Animation'}
         >
-          {isPlaying ? <Pause className="w-4 h-4 text-amber-400" /> : <Play className="w-4 h-4 text-emerald-400" />}
+          {isPlaying ? (
+            <>
+              <Pause className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
+              <span className="text-[11px] font-semibold">Active</span>
+            </>
+          ) : (
+            <>
+              <Play className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+              <span className="text-[11px] font-semibold">Paused (Play)</span>
+            </>
+          )}
         </button>
 
         <button
@@ -288,7 +303,7 @@ export const EngineViewport: React.FC<EngineViewportProps> = ({
           className={`p-2 rounded-full transition-colors ${
             showControlsHint ? 'bg-cyan-500/20 text-cyan-400' : 'hover:bg-white/10 text-slate-300'
           }`}
-          title="Toggle Experience Guide"
+          title="Panduan Interaksi (Guide)"
         >
           <Info className="w-4 h-4" />
         </button>
@@ -299,7 +314,7 @@ export const EngineViewport: React.FC<EngineViewportProps> = ({
           className={`p-2 rounded-full transition-colors ${
             isZenMode ? 'bg-purple-500/20 text-purple-400' : 'hover:bg-white/10 text-slate-300'
           }`}
-          title={isZenMode ? 'Exit Zen Mode (Show Controls)' : 'Zen Mode (Hide All Controls for Pure View)'}
+          title={isZenMode ? 'Keluar Mode Zen' : 'Mode Zen (Layar Penuh Tanpa Tombol)'}
         >
           {isZenMode ? <Eye className="w-4 h-4 text-cyan-400" /> : <EyeOff className="w-4 h-4" />}
         </button>
