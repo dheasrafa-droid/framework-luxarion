@@ -1,0 +1,6 @@
+{
+  "name": "Luxarion 2D/3D Engine Architecture",
+  "description": "Zero-dependency pure 2D/3D WebGL engine & architectural platform with granular single-responsibility modules, orchestrator, interactive examples, and architectural visualizer.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
