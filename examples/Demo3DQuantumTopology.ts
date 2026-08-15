@@ -133,6 +133,7 @@ export const Demo3DQuantumTopology: LuxarionDemo = {
     return {
       scene,
       camera,
+      controls,
       update: (delta: number, time: number) => {
         controls.update();
 

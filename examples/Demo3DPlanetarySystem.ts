@@ -235,6 +235,7 @@ export const Demo3DPlanetarySystem: LuxarionDemo = {
     return {
       scene,
       camera,
+      controls,
       update: (delta: number, time: number) => {
         controls.update();
 

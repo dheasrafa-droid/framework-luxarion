@@ -17,7 +17,9 @@ import {
   EyeOff,
   Grid,
   X,
-  Check
+  Check,
+  ZoomIn,
+  ZoomOut
 } from 'lucide-react';
 import { WebGLRenderer, Canvas2DRenderer, ThemeManager, LuxarionTheme } from '../engine/Luxarion';
 import { ALL_DEMOS, LuxarionDemo } from '../../examples/index';
@@ -84,6 +86,46 @@ export const EngineViewport: React.FC<EngineViewportProps> = ({
   const handleNextDemo = () => {
     const nextIdx = (currentIndex + 1) % ALL_DEMOS.length;
     setActiveDemo(ALL_DEMOS[nextIdx]);
+  };
+
+  const handleZoomIn = () => {
+    const inst = currentDemoInstanceRef.current;
+    if (!inst) return;
+    if (inst.controls && typeof inst.controls.zoomIn === 'function') {
+      inst.controls.zoomIn(0.8);
+    } else if (typeof inst.onZoom === 'function') {
+      inst.onZoom('in');
+    } else if (inst.camera) {
+      inst.camera.position.multiplyScalar(0.85);
+      if (typeof inst.camera.updateMatrixWorld === 'function') {
+        inst.camera.updateMatrixWorld();
+      }
+    }
+  };
+
+  const handleZoomOut = () => {
+    const inst = currentDemoInstanceRef.current;
+    if (!inst) return;
+    if (inst.controls && typeof inst.controls.zoomOut === 'function') {
+      inst.controls.zoomOut(1.25);
+    } else if (typeof inst.onZoom === 'function') {
+      inst.onZoom('out');
+    } else if (inst.camera) {
+      inst.camera.position.multiplyScalar(1.18);
+      if (typeof inst.camera.updateMatrixWorld === 'function') {
+        inst.camera.updateMatrixWorld();
+      }
+    }
+  };
+
+  const handleResetZoom = () => {
+    const inst = currentDemoInstanceRef.current;
+    if (!inst) return;
+    if (inst.controls && typeof inst.controls.resetZoom === 'function') {
+      inst.controls.resetZoom(7.0);
+    } else if (typeof inst.onZoom === 'function') {
+      inst.onZoom('reset');
+    }
   };
 
   // Initialize or switch demo
@@ -272,7 +314,8 @@ export const EngineViewport: React.FC<EngineViewportProps> = ({
       )}
 
       {/* 2. Floating Action Controls (Bottom Right - Clean & Minimal) */}
-      <div className="absolute bottom-4 right-4 z-20 flex items-center gap-1.5 bg-black/70 backdrop-blur-xl border border-white/15 p-1.5 rounded-full shadow-2xl transition-opacity">
+      <div className="absolute bottom-4 right-4 z-20 flex items-center gap-1.5 bg-black/75 backdrop-blur-xl border border-white/15 p-1.5 rounded-full shadow-2xl transition-opacity">
+        {/* Play / Pause Toggle */}
         <button
           id="btn-toggle-play"
           onClick={() => setIsPlaying(prev => !prev)}
@@ -297,6 +340,44 @@ export const EngineViewport: React.FC<EngineViewportProps> = ({
           )}
         </button>
 
+        <div className="w-[1px] h-4 bg-white/20 mx-0.5" />
+
+        {/* Zoom In Button */}
+        <button
+          id="btn-zoom-in"
+          onClick={handleZoomIn}
+          className="p-2 rounded-full hover:bg-white/15 text-slate-200 hover:text-cyan-300 transition-colors active:scale-90"
+          title="Perbesar Objek (Zoom In)"
+          aria-label="Zoom In"
+        >
+          <ZoomIn className="w-4 h-4" />
+        </button>
+
+        {/* Zoom Out Button */}
+        <button
+          id="btn-zoom-out"
+          onClick={handleZoomOut}
+          className="p-2 rounded-full hover:bg-white/15 text-slate-200 hover:text-cyan-300 transition-colors active:scale-90"
+          title="Perkecil Objek (Zoom Out)"
+          aria-label="Zoom Out"
+        >
+          <ZoomOut className="w-4 h-4" />
+        </button>
+
+        {/* Reset Camera View Button */}
+        <button
+          id="btn-zoom-reset"
+          onClick={handleResetZoom}
+          className="p-2 rounded-full hover:bg-white/15 text-slate-300 hover:text-white transition-colors active:scale-90"
+          title="Reset Sudut & Jarak Pandang (Reset Camera)"
+          aria-label="Reset Camera"
+        >
+          <RotateCcw className="w-3.5 h-3.5" />
+        </button>
+
+        <div className="w-[1px] h-4 bg-white/20 mx-0.5" />
+
+        {/* Interaction Guide */}
         <button
           id="btn-toggle-hint"
           onClick={() => setShowControlsHint(!showControlsHint)}
@@ -308,6 +389,7 @@ export const EngineViewport: React.FC<EngineViewportProps> = ({
           <Info className="w-4 h-4" />
         </button>
 
+        {/* Zen Fullscreen Mode */}
         <button
           id="btn-toggle-zen"
           onClick={() => setIsZenMode(!isZenMode)}

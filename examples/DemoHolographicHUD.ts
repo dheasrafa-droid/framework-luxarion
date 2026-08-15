@@ -138,6 +138,7 @@ export const DemoHolographicHUD: LuxarionDemo = {
     return {
       scene,
       camera,
+      controls,
       update: (delta: number, time: number) => {
         controls.update();
 

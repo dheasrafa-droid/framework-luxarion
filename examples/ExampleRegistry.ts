@@ -4,7 +4,17 @@
  * Part of Luxarion Engine - Single Responsibility: Example Scene Orchestration.
  */
 
-import { Scene, Camera, WebGLRenderer, Canvas2DRenderer, ThemeManager } from '../src/engine/Luxarion';
+import { Scene, Camera, OrbitControls, WebGLRenderer, Canvas2DRenderer, ThemeManager } from '../src/engine/Luxarion';
+
+export interface LuxarionDemoInstance {
+  scene?: Scene;
+  camera?: Camera;
+  controls?: OrbitControls;
+  onZoom?: (direction: 'in' | 'out' | 'reset') => void;
+  update: (delta: number, time: number) => void;
+  onResize?: (width: number, height: number) => void;
+  dispose?: () => void;
+}
 
 export interface LuxarionDemo {
   id: string;
@@ -16,11 +26,5 @@ export interface LuxarionDemo {
     glRenderer: WebGLRenderer | null,
     canvas2dRenderer: Canvas2DRenderer | null,
     themeManager: ThemeManager
-  ) => {
-    scene?: Scene;
-    camera?: Camera;
-    update: (delta: number, time: number) => void;
-    onResize?: (width: number, height: number) => void;
-    dispose?: () => void;
-  };
+  ) => LuxarionDemoInstance;
 }

@@ -128,6 +128,26 @@ export class OrbitControls {
     this._isDragging = false;
   }
 
+  public zoomIn(factor: number = 0.8): void {
+    this._targetSpherical.radius = MathUtils.clamp(
+      this._targetSpherical.radius * factor,
+      this.minDistance,
+      this.maxDistance
+    );
+  }
+
+  public zoomOut(factor: number = 1.25): void {
+    this._targetSpherical.radius = MathUtils.clamp(
+      this._targetSpherical.radius * factor,
+      this.minDistance,
+      this.maxDistance
+    );
+  }
+
+  public resetZoom(defaultDistance: number = 6.0): void {
+    this._targetSpherical.radius = MathUtils.clamp(defaultDistance, this.minDistance, this.maxDistance);
+  }
+
   public update(): void {
     if (this.enableDamping) {
       this._spherical.theta += (this._targetSpherical.theta - this._spherical.theta) * this.dampingFactor;

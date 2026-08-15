@@ -104,6 +104,7 @@ export const Demo3DCrystals: LuxarionDemo = {
     return {
       scene,
       camera,
+      controls,
       update: (delta: number, time: number) => {
         controls.update();
 

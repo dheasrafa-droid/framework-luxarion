@@ -124,6 +124,7 @@ export const Demo3DAudioVisualizer: LuxarionDemo = {
     return {
       scene,
       camera,
+      controls,
       update: (_delta: number, time: number) => {
         controls.update();
 
