@@ -70,11 +70,11 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
       </div>
 
       {/* Mode Navigation Tabs */}
-      <nav className="flex items-center gap-1 bg-black/20 p-1 rounded-lg border border-white/5 text-sm">
+      <nav className="flex items-center gap-1 bg-black/20 p-1 rounded-lg border border-white/5 text-xs sm:text-sm overflow-x-auto max-w-full scrollbar-none">
         <button
           id="tab-btn-engine"
           onClick={() => onSelectTab('engine')}
-          className={`flex items-center gap-2 px-3 py-1.5 rounded-md font-medium transition-all ${
+          className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-md font-medium transition-all whitespace-nowrap ${
             activeTab === 'engine'
               ? 'shadow-sm font-semibold'
               : 'opacity-70 hover:opacity-100'
@@ -84,14 +84,14 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
             color: activeTab === 'engine' ? (currentTheme.background === '#f1f5f9' ? '#ffffff' : '#000000') : 'inherit'
           }}
         >
-          <Box className="w-4 h-4" />
+          <Box className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           <span>Live Studio</span>
         </button>
 
         <button
           id="tab-btn-architecture"
           onClick={() => onSelectTab('architecture')}
-          className={`flex items-center gap-2 px-3 py-1.5 rounded-md font-medium transition-all ${
+          className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-md font-medium transition-all whitespace-nowrap ${
             activeTab === 'architecture'
               ? 'shadow-sm font-semibold'
               : 'opacity-70 hover:opacity-100'
@@ -101,14 +101,15 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
             color: activeTab === 'architecture' ? (currentTheme.background === '#f1f5f9' ? '#ffffff' : '#000000') : 'inherit'
           }}
         >
-          <Layers className="w-4 h-4" />
-          <span>Graph & Lifecycle</span>
+          <Layers className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <span className="hidden sm:inline">Graph & Lifecycle</span>
+          <span className="sm:hidden">Graph</span>
         </button>
 
         <button
           id="tab-btn-access-rules"
           onClick={() => onSelectTab('access-rules')}
-          className={`flex items-center gap-2 px-3 py-1.5 rounded-md font-medium transition-all ${
+          className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-md font-medium transition-all whitespace-nowrap ${
             activeTab === 'access-rules'
               ? 'shadow-sm font-semibold'
               : 'opacity-70 hover:opacity-100'
@@ -118,14 +119,15 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
             color: activeTab === 'access-rules' ? (currentTheme.background === '#f1f5f9' ? '#ffffff' : '#000000') : 'inherit'
           }}
         >
-          <ShieldCheck className="w-4 h-4" />
-          <span>Access & Encapsulation</span>
+          <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <span className="hidden sm:inline">Access & Encapsulation</span>
+          <span className="sm:hidden">Access</span>
         </button>
 
         <button
           id="tab-btn-tests"
           onClick={() => onSelectTab('tests')}
-          className={`flex items-center gap-2 px-3 py-1.5 rounded-md font-medium transition-all ${
+          className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-md font-medium transition-all whitespace-nowrap ${
             activeTab === 'tests'
               ? 'shadow-sm font-semibold'
               : 'opacity-70 hover:opacity-100'
@@ -135,8 +137,9 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
             color: activeTab === 'tests' ? (currentTheme.background === '#f1f5f9' ? '#ffffff' : '#000000') : 'inherit'
           }}
         >
-          <Activity className="w-4 h-4" />
-          <span>Stability Tests</span>
+          <Activity className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <span className="hidden sm:inline">Stability Tests</span>
+          <span className="sm:hidden">Tests</span>
         </button>
       </nav>
 
